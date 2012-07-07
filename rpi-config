@@ -42,6 +42,10 @@ function check_guierror {
 }
 
 ################################################################
+function do_ {
+    eval
+}
+
 function set_hostname {
     echo "$1" \> /etc/hostname 
     check_guierror $? "Unable to remove files /etc/ssh/ssh_host_*"
@@ -137,10 +141,6 @@ function do_mem {
     [ $? -eq 0 ] && set_mem "$res"
 }
 
-function do__ {
-    eval
-}
-
 function set_shutdown {
     eval shutdown -${1} now
 }
@@ -153,57 +153,347 @@ function do_shutdown {
     [ $? -eq 0 ] && set_shutdown h
 }
 
-function set_upg_deb {
+function set_upgrade_deb {
     apt-get update && apt-get dist-upgrade
     check_guierror $? "Raspbian upgrade unsuccessful"
 }
-function do_upg_deb {
+function do_upgrade_deb {
     descr "This action will upgrade Raspbian to the latest version."
-    [ $? -eq 0 ] && set_upg_deb
+    [ $? -eq 0 ] && set_upgrade_deb
 }
 
-function set_upg_fw {
+function set_upgrade_fw {
     rpi-update
     check_guierror $? "Firmware upgrade unsuccessful"
 }
-function do_upg_fw {
+function do_upgrade_fw {
     descr "This action will run the 'rpi-update' script, which updates the kernel and firmware found in /boot."
-    [ $? -eq 0 ] && set_upg_fw
+    [ $? -eq 0 ] && set_upgrade_fw
+}
+
+function set_sdtv_mode {
+    eval
+}
+function do_sdtv_mode {
+    typeset res
+
+    descr "This action will set the output mode of the composite output."
+    [ $? -ne 0 ] && return 1
+
+    res=$(di --cancel-label "Back" --menu "Select a configuration option:" 20 70 12 \
+          0 "Normal NTSC (default)" \
+          1 "Japanese version of NTSC [no pedestal]" \
+          2 "Normal PAL" \
+          3 "Brazilian version of PAL [525/60, different subcarrier]" \
+         )
+    [ $? -eq 0 ] && do_sdtv_mode "$res"
+}
+
+function set_sdtv_aspect {
+    eval
+}
+function do_sdtv_aspect {
+    typeset res
+
+    descr "This action will set the aspect ratio of the composite output."
+    [ $? -ne 0 ] && return 1
+
+    res=$(di --cancel-label "Back" --menu "Select a configuration option:" 20 70 12 \
+          1  "4:3 (default)" \
+          2  "14:9" \
+          3  "16:9" \
+         )
+    [ $? -eq 0 ] && do_sdtv_aspect "$res"
+}
+
+function set_hdmi_safe {
+    eval
+}
+function do_hdmi_safe {
+    typeset res
+
+    descr "This action will override HDMI parameters to safe values, to ensure compatibility:\n \
+   - hdmi_force_hotplug=1\n \
+   - config_hdmi_boost=4\n \
+   - hdmi_group=1\n \
+   - hdmi_mode=1\n \
+   - disable_overscan=0\n\n \
+See http://elinux.org/RPi_config.txt for more information."
+    [ $? -ne 0 ] && return 1
+
+    res=$(di --cancel-label "Back" --menu "Select a configuration option:" 20 70 12 \
+          0  "Disable HDMI safe mode (default)" \
+          1  "Enable HDMI safe mode" \
+         )
+    [ $? -eq 0 ] && do_hdmi_safe "$res"
+}
+
+function set_hdmi_force_hotplug {
+    eval
+}
+function do_hdmi_force_hotplug {
+    typeset res
+
+    descr "This action will force video output over HDMI, even if there is no cable connected."
+    [ $? -ne 0 ] && return 1
+
+    res=$(di --cancel-label "Back" --menu "Select a configuration option:" 20 70 12 \
+          0  "Use composite video if no cable is connected (default)" \
+          1  "Force video over HDMI if no cable is connected" \
+         )
+    [ $? -eq 0 ] && do_hdmi_force_hotplug "$res"
+}
+
+function set_hdmi_drive {
+    eval
+}
+function do_hdmi_drive {
+    typeset res
+
+    descr "This action will select the video format format used over the HDMI output."
+    [ $? -ne 0 ] && return 1
+
+    res=$(di --cancel-label "Back" --menu "Select a configuration option:" 20 70 12 \
+          0  "Normal DVI mode [without sound]" \
+          1  "Normal HDMI mode [with sound if supported]" \
+         )
+    [ $? -eq 0 ] && do_hdmi_drive "$res"
+}
+
+function set_hdmi_resolution {
+    eval
+}
+function do_hdmi_resolution {
+    typeset res
+
+    descr "This action will select the screen resolution of the HDMI output.\n \
+  H  means 16:9 variant (of a normally 4:3 mode).\n \
+  2x means pixel doubled (i.e. higher clock rate, with each pixel repeated twice)\n \
+  4x means pixel quadrupled (i.e. higher clock rate, with each pixel repeated four times)"
+    [ $? -ne 0 ] && return 1
+
+    res=$(di --cancel-label "Back" --menu "Select a configuration option:" 20 70 25 \
+          cea1    "VGA" \
+          cea2    "480p  60Hz" \
+          cea3    "480p  60Hz  H" \
+          cea4    "720p  60hz" \
+          cea5    "1080i 60hz" \
+          cea6    "480i  60hz" \
+          cea7    "480i  60hz  h" \
+          cea8    "240p  60hz" \
+          cea9    "240p  60hz  h" \
+          cea10   "480i  60hz  4x" \
+          cea11   "480i  60hz  4x h" \
+          cea12   "240p  60hz  4x" \
+          cea13   "240p  60hz  4x h" \
+          cea14   "480p  60hz  2x" \
+          cea15   "480p  60hz  2x h" \
+          cea16   "1080p 60hz" \
+          cea17   "576p  50hz" \
+          cea18   "576p  50hz  h" \
+          cea19   "720p  50hz" \
+          cea20   "1080i 50hz" \
+          cea21   "576i  50hz" \
+          cea22   "576i  50hz  h" \
+          cea23   "288p  50hz" \
+          cea24   "288p  50hz  h" \
+          cea25   "576i  50hz  4x" \
+          cea26   "576i  50hz  4x h" \
+          cea27   "288p  50hz  4x" \
+          cea28   "288p  50hz  4x h" \
+          cea29   "576p  50hz  2x" \
+          cea30   "576p  50hz  2x h" \
+          cea31   "1080p 50hz" \
+          cea32   "1080p 24hz" \
+          cea33   "1080p 25hz" \
+          cea34   "1080p 30hz" \
+          cea35   "480p  60hz  4x" \
+          cea36   "480p  60hz  4xh" \
+          cea37   "576p  50hz  4x" \
+          cea38   "576p  50hz  4x h" \
+          cea39   "1080i 50hz  reduced blanking" \
+          cea40   "1080i 100hz" \
+          cea41   "720p  100hz" \
+          cea42   "576p  100hz" \
+          cea43   "576p  100hz h" \
+          cea44   "576i  100hz" \
+          cea45   "576i  100hz h" \
+          cea46   "1080i 120hz" \
+          cea47   "720p  120hz" \
+          cea48   "480p  120hz" \
+          cea49   "480p  120hz h" \
+          cea50   "480i  120hz" \
+          cea51   "480i  120hz h" \
+          cea52   "576p  200hz" \
+          cea53   "576p  200hz h" \
+          cea54   "576i  200hz" \
+          cea55   "576i  200hz h" \
+          cea56   "480p  240hz" \
+          cea57   "480p  240hz h" \
+          cea58   "480i  240hz" \
+          cea59   "480i  240hz h" \
+          dmt1    "640x350   85hz" \
+          dmt2    "640x400   85hz" \
+          dmt3    "720x400   85hz" \
+          dmt4    "640x480   60hz" \
+          dmt5    "640x480   72hz" \
+          dmt6    "640x480   75hz" \
+          dmt7    "640x480   85hz" \
+          dmt8    "800x600   56hz" \
+          dmt9    "800x600   60hz" \
+          dmt10   "800x600   72hz" \
+          dmt11   "800x600   75hz" \
+          dmt12   "800x600   85hz" \
+          dmt13   "800x600   120hz" \
+          dmt14   "848x480   60hz" \
+          dmt16   "1024x768  60hz" \
+          dmt17   "1024x768  70hz" \
+          dmt18   "1024x768  75hz" \
+          dmt19   "1024x768  85hz" \
+          dmt20   "1024x768  120hz" \
+          dmt21   "1152x864  75hz" \
+          dmt22   "1280x768        reduced blanking" \
+          dmt23   "1280x768  60hz" \
+          dmt24   "1280x768  75hz" \
+          dmt25   "1280x768  85hz" \
+          dmt26   "1280x768  120hz reduced blanking" \
+          dmt27   "1280x800        reduced blanking" \
+          dmt28   "1280x800  60hz" \
+          dmt29   "1280x800  75hz" \
+          dmt30   "1280x800  85hz" \
+          dmt31   "1280x800  120hz reduced blanking" \
+          dmt32   "1280x960  60hz" \
+          dmt33   "1280x960  85hz" \
+          dmt34   "1280x960  120hz reduced blanking" \
+          dmt35   "1280x1024 60hz" \
+          dmt36   "1280x1024 75hz" \
+          dmt37   "1280x1024 85hz" \
+          dmt38   "1280x1024 120hz reduced blanking" \
+          dmt39   "1360x768  60hz" \
+          dmt40   "1360x768  120hz reduced blanking" \
+          dmt41   "1400x1050       reduced blanking" \
+          dmt42   "1400x1050 60hz" \
+          dmt43   "1400x1050 75hz" \
+          dmt44   "1400x1050 85hz" \
+          dmt45   "1400x1050 120hz reduced blanking" \
+          dmt46   "1440x900        reduced blanking" \
+          dmt47   "1440x900  60hz" \
+          dmt48   "1440x900  75hz" \
+          dmt49   "1440x900  85hz" \
+          dmt50   "1440x900  120hz reduced blanking" \
+          dmt51   "1600x1200 60hz" \
+          dmt52   "1600x1200 65hz" \
+          dmt53   "1600x1200 70hz" \
+          dmt54   "1600x1200 75hz" \
+          dmt55   "1600x1200 85hz" \
+          dmt56   "1600x1200 120hz reduced blanking" \
+          dmt57   "1680x1050       reduced blanking" \
+          dmt58   "1680x1050 60hz" \
+          dmt59   "1680x1050 75hz" \
+          dmt60   "1680x1050 85hz" \
+          dmt61   "1680x1050 120hz reduced blanking" \
+          dmt62   "1792x1344 60hz" \
+          dmt63   "1792x1344 75hz" \
+          dmt64   "1792x1344 120hz reduced blanking" \
+          dmt65   "1856x1392 60hz" \
+          dmt66   "1856x1392 75hz" \
+          dmt67   "1856x1392 120hz reduced blanking" \
+          dmt68   "1920x1200       reduced blanking" \
+          dmt69   "1920x1200 60hz" \
+          dmt70   "1920x1200 75hz" \
+          dmt71   "1920x1200 85hz" \
+          dmt72   "1920x1200 120hz reduced blanking" \
+          dmt73   "1920x1440 60hz" \
+          dmt74   "1920x1440 75hz" \
+          dmt75   "1920x1440 120hz reduced blanking" \
+          dmt76   "2560x1600       reduced blanking" \
+          dmt77   "2560x1600 60hz" \
+          dmt78   "2560x1600 75hz" \
+          dmt79   "2560x1600 85hz" \
+          dmt80   "2560x1600 120hz reduced blanking" \
+          dmt81   "1366x768  60hz" \
+          dmt82   "1080p     60hz" \
+          dmt83   "1600x900        reduced blanking" \
+          dmt84   "2048x1152       reduced blanking" \
+          dmt85   "720p      60hz" \
+          dmt86   "1366x768        reduced blanking" \
+         )
+    [ $? -eq 0 ] && do_hdmi_group "$res"
+}
+
+function set_reset_video {
+    eval
+}
+function do_reset_video {
+    typeset res
+
+    descr "This action will reset the video settings to their defaults."
+    [ $? -eq 0 ] && do_reset_video
+}
+
+function set_hdmi_boost {
+    eval
+}
+function do_hdmi_boost {
+    typeset res
+
+    descr "This action will boost the strength of the HDMI signal, in case there are interferences."
+    [ $? -eq 0 ] && do_hdmi_boost
+
+    res=$(di --cancel-label "Back" --menu "Select a configuration option:" 20 70 12 \
+          0  "No boost (default)" \
+          4  "Medium boost" \
+          7  "Maximum boost" \
+         )
+    [ $? -eq 0 ] && do_hdmi_boost "$res"
 }
 
 ################################################################
 check_root
-check_error $? "You must be root to use this program"
+check_error $? "you must be root to use this program"
 
 check_tool dialog
-check_error $? "This script requires 'dialog'. Try 'sudo apt-get install dialog'."
+check_error $? "this script requires 'dialog'. try 'sudo apt-get install dialog'."
 
 check_tool rpi-update
 check_error $? "This script requires 'rpi-update'. Please try installing it."
 
 while [ 1 ]; do
     res=$(di --cancel-label "Exit" --menu "Select a configuration option:" 20 70 12 \
-    	 hostname "Change hostname" \
-    	 resize   "Resize partition to fill SD card" \
-    	 tz       "Configure local timezone" \
-    	 locales  "Set locales" \
-    	 passwd   "Change root password" \
-    	 mem      "Change memory allocation" \
-    	 _        "" \
-         upg_deb  "Upgrade Raspbian" \
-         upg_fw   "Upgrade Raspberry Pi firmware" \
-    	 _        "" \
-         reboot   "Reboot" \
-         shutdown "Shutdown" \
+    	  hostname    "Change hostname" \
+    	  resize      "Resize partition to fill SD card" \
+    	  tz          "Configure local timezone" \
+    	  locales     "Set locales" \
+    	  passwd      "Change root password" \
+    	  mem         "Change memory allocation" \
+          upgrade_deb "Upgrade Raspbian" \
+          upgrade_fw  "Upgrade Raspberry Pi firmware" \
+          video       "Change video settings" \
+          reboot      "Reboot" \
+          shutdown    "Shutdown" \
          )
-    if [ $? -eq 0 ]; then
-        eval do_${res} 
+    [ $? -ne 0 ] && break
+
+    if [ "$res" = "video" ]; then
+        while [ 1 ]; do
+            res=$(di --cancel-label "Back" --menu "Select a configuration option:" 20 70 12 \
+                  sdtv_mode          "TV standard for composite output" \
+                  sdtv_aspect        "Aspect ratio for composite output" \
+                  hdmi_safe          "Enable maximum HDMI compatibility settings" \
+                  hdmi_force_hotplug "Force HDMI as default source" \
+                  hdmi_drive         "Choose HDMI or DVI mode" \
+                  hdmi_resolution    "Define the screen resolution" \
+                  reset_video        "Reset video options" \
+                 )
+            [ $? -ne 0 ] && break
+            eval do_${res} 
+        done
     else
-        break
+        eval do_${res} 
     fi
 done
 
-clear
+#clear
 
 exit 0
 
