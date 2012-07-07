@@ -183,7 +183,7 @@ function do_sdtv_mode {
           2 "Normal PAL" \
           3 "Brazilian version of PAL [525/60, different subcarrier]" \
          )
-    [ $? -eq 0 ] && do_sdtv_mode "$res"
+    [ $? -eq 0 ] && set_sdtv_mode "$res"
 }
 
 function set_sdtv_aspect {
@@ -200,7 +200,7 @@ function do_sdtv_aspect {
           2  "14:9" \
           3  "16:9" \
          )
-    [ $? -eq 0 ] && do_sdtv_aspect "$res"
+    [ $? -eq 0 ] && set_sdtv_aspect "$res"
 }
 
 function set_hdmi_safe {
@@ -222,7 +222,7 @@ See http://elinux.org/RPi_config.txt for more information."
           0  "Disable HDMI safe mode (default)" \
           1  "Enable HDMI safe mode" \
          )
-    [ $? -eq 0 ] && do_hdmi_safe "$res"
+    [ $? -eq 0 ] && set_hdmi_safe "$res"
 }
 
 function set_hdmi_force_hotplug {
@@ -238,7 +238,7 @@ function do_hdmi_force_hotplug {
           0  "Use composite video if no cable is connected (default)" \
           1  "Force video over HDMI if no cable is connected" \
          )
-    [ $? -eq 0 ] && do_hdmi_force_hotplug "$res"
+    [ $? -eq 0 ] && set_hdmi_force_hotplug "$res"
 }
 
 function set_hdmi_drive {
@@ -254,7 +254,7 @@ function do_hdmi_drive {
           0  "Normal DVI mode [without sound]" \
           1  "Normal HDMI mode [with sound if supported]" \
          )
-    [ $? -eq 0 ] && do_hdmi_drive "$res"
+    [ $? -eq 0 ] && set_hdmi_drive "$res"
 }
 
 function set_hdmi_resolution {
@@ -415,7 +415,7 @@ function do_hdmi_resolution {
           dmt85   "720p      60Hz" \
           dmt86   "1366x768        reduced blanking" \
          )
-    [ $? -eq 0 ] && do_hdmi_group "$res"
+    [ $? -eq 0 ] && set_hdmi_resolution "$res"
 }
 
 function set_hdmi_boost {
@@ -425,14 +425,14 @@ function do_hdmi_boost {
     typeset res
 
     descr "This action will boost the strength of the HDMI signal, in case there are interferences."
-    [ $? -eq 0 ] && do_hdmi_boost
+    [ $? -eq 0 ] && return 1
 
     res=$(di --cancel-label "Back" --menu "Select a configuration option:" 20 70 12 \
           0  "No boost (default)" \
           4  "Medium boost" \
           7  "Maximum boost" \
          )
-    [ $? -eq 0 ] && do_hdmi_boost "$res"
+    [ $? -eq 0 ] && set_hdmi_boost "$res"
 }
 
 function set_reset_video {
@@ -442,7 +442,7 @@ function do_reset_video {
     typeset res
 
     descr "This action will reset the video settings to their defaults."
-    [ $? -eq 0 ] && do_reset_video
+    [ $? -eq 0 ] && set_reset_video
 }
 
 ################################################################
