@@ -1,0 +1,209 @@
+#!/bin/bash
+
+
+
+################################################################
+function di {
+    dialog --output-fd 1 --backtitle "Raspbian configuration" "$@"
+}
+
+function reconfig {
+    clear
+    dpkg-reconfigure "$1"
+}
+
+function descr {
+    di --title "Description" --yes-label "Proceed" --no-label "Cancel" \
+       --yesno "$1" 20 70
+}
+################################################################
+function check_tool {
+    command -v "$1" &>/dev/null
+}
+
+function check_root {
+    whoami | grep '^root$' &>/dev/null
+}
+
+function check_error {
+    if [ "$1" != 0 ]; then
+        echo "Error: $2"
+        exit 1
+    fi
+}
+
+function check_guierror {
+    if [ "$1" != 0 ]; then
+        di --title "Action result" --msgbox "Error: $2" 5 70
+    else
+        di --title "Action result" --msgbox "Success" 5 70
+    fi
+    return $1
+}
+
+################################################################
+function set_hostname {
+    echo "$1" \> /etc/hostname 
+    check_guierror $? "Unable to remove files /etc/ssh/ssh_host_*"
+    hostname "$1"
+    sed -i "s/pisces/$1/g" /etc/hosts
+}
+function do_hostname {
+    typeset res
+    
+    descr "This action will change the hostname of the machine."
+    [ $? -ne 0 ] && return 1
+
+    res=$(di --inputbox "Enter new hostname:" 20 70)
+    [ $? -eq 0 ] && set_hostname "$res"
+}
+
+function set_ssh {
+    rm -f /etc/ssh/ssh_host_*
+    check_guierror $? "Unable to remove files /etc/ssh/ssh_host_*"
+    [ $? -ne 0 ] && return 1
+
+    reconfig openssh-server
+    check_guierror $? "Configuration unsuccessful"
+}
+function do_ssh {
+    descr "This action will regenerate the SSH keys of the machine."
+    [ $? -eq 0 ] && set_ssh
+}
+
+function set_resize {
+    descr "This action is not yet supported."
+}
+function do_resize {
+    descr "This action will expand the root partition of the machine to fit the SD card."
+    [ $? -eq 0 ] && set_resize
+}
+
+function set_tz {
+    reconfig "tzdata"
+    check_guierror $? "Configuration unsuccessful"
+}
+function do_tz {
+    descr "This action will change the timezone of the machine."
+    [ $? -eq 0 ] && set_tz
+}
+
+function set_locales {
+    reconfig "locales"
+    check_guierror $? "Configuration unsuccessful"
+}
+function do_locales {
+    descr "This action will set the locales configured on the machine."
+    [ $? -eq 0 ] && set_locales
+}
+
+function set_passwd {
+    passwd
+    check_guierror $? "Password was not set"
+}
+function do_passwd {
+    descr "This action will change the password of the root user."
+    [ $? -eq 0 ] && set_passwd
+}
+
+function set_mem {
+    typeset filename
+
+    case "$1" in
+        "128/128")
+            filename=arm128_start.elf
+        ;;
+        "192/64")
+            filename=arm192_start.elf
+        ;;
+        "224/32")
+            filename=arm224_start.elf
+        ;;
+    esac
+
+    cp -f /boot/${filename} /boot/start.elf 
+    check_guierror $? "Unable to copy file"
+}
+function do_mem {
+    typeset res
+
+    descr "This action will change how the RAM is split between the CPU and the GPU."
+    [ $? -ne 0 ] && return 1
+
+    res=$(di --menu "Select a memory split (CPU/GPU):" 20 70 3 \
+              "128/128" "" \
+              "192/64" "" \
+              "224/32" "")
+    [ $? -eq 0 ] && set_mem "$res"
+}
+
+function do__ {
+    eval
+}
+
+function set_shutdown {
+    eval shutdown -${1} now
+}
+function do_reboot {
+    descr "This action will restart your Raspberry Pi."
+    [ $? -eq 0 ] && set_shutdown r
+}
+function do_shutdown {
+    descr "This action will shutdown your Raspberry Pi."
+    [ $? -eq 0 ] && set_shutdown h
+}
+
+function set_upg_deb {
+    apt-get update && apt-get dist-upgrade
+    check_guierror $? "Raspbian upgrade unsuccessful"
+}
+function do_upg_deb {
+    descr "This action will upgrade Raspbian to the latest version."
+    [ $? -eq 0 ] && set_upg_deb
+}
+
+function set_upg_fw {
+    rpi-update
+    check_guierror $? "Firmware upgrade unsuccessful"
+}
+function do_upg_fw {
+    descr "This action will run the 'rpi-update' script, which updates the kernel and firmware found in /boot."
+    [ $? -eq 0 ] && set_upg_fw
+}
+
+################################################################
+check_root
+check_error $? "You must be root to use this program"
+
+check_tool dialog
+check_error $? "This script requires 'dialog'. Try 'sudo apt-get install dialog'."
+
+check_tool rpi-update
+check_error $? "This script requires 'rpi-update'. Please try installing it."
+
+while [ 1 ]; do
+    res=$(di --cancel-label "Exit" --menu "Select a configuration option:" 20 70 12 \
+    	 hostname "Change hostname" \
+    	 resize   "Resize partition to fill SD card" \
+    	 tz       "Configure local timezone" \
+    	 locales  "Set locales" \
+    	 passwd   "Change root password" \
+    	 mem      "Change memory allocation" \
+    	 _        "" \
+         upg_deb  "Upgrade Raspbian" \
+         upg_fw   "Upgrade Raspberry Pi firmware" \
+    	 _        "" \
+         reboot   "Reboot" \
+         shutdown "Shutdown" \
+         )
+    if [ $? -eq 0 ]; then
+        eval do_${res} 
+    else
+        break
+    fi
+done
+
+clear
+
+exit 0
+
