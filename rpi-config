@@ -35,7 +35,7 @@ function check_error {
 function check_guierror {
     if [ "$1" != 0 ]; then
         di --title "Action result" --msgbox "Error: $2" 5 70
-    else
+    elif [ "$3" != no_ok ]; then
         di --title "Action result" --msgbox "Success" 5 70
     fi
     return $1
@@ -47,10 +47,7 @@ function do_ {
 }
 
 function set_hostname {
-    echo "$1" \> /etc/hostname 
-    check_guierror $? "Unable to remove files /etc/ssh/ssh_host_*"
-    hostname "$1"
-    sed -i "s/pisces/$1/g" /etc/hosts
+    descr "This action is not yet supported."
 }
 function do_hostname {
     typeset res
@@ -64,7 +61,7 @@ function do_hostname {
 
 function set_ssh {
     rm -f /etc/ssh/ssh_host_*
-    check_guierror $? "Unable to remove files /etc/ssh/ssh_host_*"
+    check_guierror $? "Unable to remove files /etc/ssh/ssh_host_*" no_ok
     [ $? -ne 0 ] && return 1
 
     reconfig openssh-server
@@ -83,13 +80,13 @@ function do_resize {
     [ $? -eq 0 ] && set_resize
 }
 
-function set_tz {
+function set_timezone {
     reconfig "tzdata"
-    check_guierror $? "Configuration unsuccessful"
+    check_guierror $? "Configuration unsuccessful" no_ok
 }
-function do_tz {
+function do_timezone {
     descr "This action will change the timezone of the machine."
-    [ $? -eq 0 ] && set_tz
+    [ $? -eq 0 ] && set_timezone
 }
 
 function set_locales {
@@ -110,7 +107,7 @@ function do_passwd {
     [ $? -eq 0 ] && set_passwd
 }
 
-function set_mem {
+function set_memory {
     typeset filename
 
     case "$1" in
@@ -128,7 +125,7 @@ function set_mem {
     cp -f /boot/${filename} /boot/start.elf 
     check_guierror $? "Unable to copy file"
 }
-function do_mem {
+function do_memory {
     typeset res
 
     descr "This action will change how the RAM is split between the CPU and the GPU."
@@ -138,7 +135,7 @@ function do_mem {
               "128/128" "" \
               "192/64" "" \
               "224/32" "")
-    [ $? -eq 0 ] && set_mem "$res"
+    [ $? -eq 0 ] && set_memory "$res"
 }
 
 function set_shutdown {
@@ -172,7 +169,7 @@ function do_upgrade_fw {
 }
 
 function set_sdtv_mode {
-    eval
+    descr "This action is not yet supported."
 }
 function do_sdtv_mode {
     typeset res
@@ -190,7 +187,7 @@ function do_sdtv_mode {
 }
 
 function set_sdtv_aspect {
-    eval
+    descr "This action is not yet supported."
 }
 function do_sdtv_aspect {
     typeset res
@@ -207,7 +204,7 @@ function do_sdtv_aspect {
 }
 
 function set_hdmi_safe {
-    eval
+    descr "This action is not yet supported."
 }
 function do_hdmi_safe {
     typeset res
@@ -229,7 +226,7 @@ See http://elinux.org/RPi_config.txt for more information."
 }
 
 function set_hdmi_force_hotplug {
-    eval
+    descr "This action is not yet supported."
 }
 function do_hdmi_force_hotplug {
     typeset res
@@ -245,7 +242,7 @@ function do_hdmi_force_hotplug {
 }
 
 function set_hdmi_drive {
-    eval
+    descr "This action is not yet supported."
 }
 function do_hdmi_drive {
     typeset res
@@ -261,7 +258,7 @@ function do_hdmi_drive {
 }
 
 function set_hdmi_resolution {
-    eval
+    descr "This action is not yet supported."
 }
 function do_hdmi_resolution {
     typeset res
@@ -421,18 +418,8 @@ function do_hdmi_resolution {
     [ $? -eq 0 ] && do_hdmi_group "$res"
 }
 
-function set_reset_video {
-    eval
-}
-function do_reset_video {
-    typeset res
-
-    descr "This action will reset the video settings to their defaults."
-    [ $? -eq 0 ] && do_reset_video
-}
-
 function set_hdmi_boost {
-    eval
+    descr "This action is not yet supported."
 }
 function do_hdmi_boost {
     typeset res
@@ -446,6 +433,16 @@ function do_hdmi_boost {
           7  "Maximum boost" \
          )
     [ $? -eq 0 ] && do_hdmi_boost "$res"
+}
+
+function set_reset_video {
+    descr "This action is not yet supported."
+}
+function do_reset_video {
+    typeset res
+
+    descr "This action will reset the video settings to their defaults."
+    [ $? -eq 0 ] && do_reset_video
 }
 
 ################################################################
@@ -462,10 +459,10 @@ while [ 1 ]; do
     res=$(di --cancel-label "Exit" --menu "Select a configuration option:" 20 70 12 \
     	  hostname    "Change hostname" \
     	  resize      "Resize partition to fill SD card" \
-    	  tz          "Configure local timezone" \
+    	  timezone    "Configure local timezone" \
     	  locales     "Set locales" \
     	  passwd      "Change root password" \
-    	  mem         "Change memory allocation" \
+    	  memory      "Change memory allocation" \
           upgrade_deb "Upgrade Raspbian" \
           upgrade_fw  "Upgrade Raspberry Pi firmware" \
           video       "Change video settings" \
