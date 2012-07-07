@@ -276,146 +276,146 @@ function do_hdmi_resolution {
           cea1    "VGA" \
           cea2    "480p  60Hz" \
           cea3    "480p  60Hz  H" \
-          cea4    "720p  60hz" \
-          cea5    "1080i 60hz" \
-          cea6    "480i  60hz" \
-          cea7    "480i  60hz  h" \
-          cea8    "240p  60hz" \
-          cea9    "240p  60hz  h" \
-          cea10   "480i  60hz  4x" \
-          cea11   "480i  60hz  4x h" \
-          cea12   "240p  60hz  4x" \
-          cea13   "240p  60hz  4x h" \
-          cea14   "480p  60hz  2x" \
-          cea15   "480p  60hz  2x h" \
-          cea16   "1080p 60hz" \
-          cea17   "576p  50hz" \
-          cea18   "576p  50hz  h" \
-          cea19   "720p  50hz" \
-          cea20   "1080i 50hz" \
-          cea21   "576i  50hz" \
-          cea22   "576i  50hz  h" \
-          cea23   "288p  50hz" \
-          cea24   "288p  50hz  h" \
-          cea25   "576i  50hz  4x" \
-          cea26   "576i  50hz  4x h" \
-          cea27   "288p  50hz  4x" \
-          cea28   "288p  50hz  4x h" \
-          cea29   "576p  50hz  2x" \
-          cea30   "576p  50hz  2x h" \
-          cea31   "1080p 50hz" \
-          cea32   "1080p 24hz" \
-          cea33   "1080p 25hz" \
-          cea34   "1080p 30hz" \
-          cea35   "480p  60hz  4x" \
-          cea36   "480p  60hz  4xh" \
-          cea37   "576p  50hz  4x" \
-          cea38   "576p  50hz  4x h" \
-          cea39   "1080i 50hz  reduced blanking" \
-          cea40   "1080i 100hz" \
-          cea41   "720p  100hz" \
-          cea42   "576p  100hz" \
-          cea43   "576p  100hz h" \
-          cea44   "576i  100hz" \
-          cea45   "576i  100hz h" \
-          cea46   "1080i 120hz" \
-          cea47   "720p  120hz" \
-          cea48   "480p  120hz" \
-          cea49   "480p  120hz h" \
-          cea50   "480i  120hz" \
-          cea51   "480i  120hz h" \
-          cea52   "576p  200hz" \
-          cea53   "576p  200hz h" \
-          cea54   "576i  200hz" \
-          cea55   "576i  200hz h" \
-          cea56   "480p  240hz" \
-          cea57   "480p  240hz h" \
-          cea58   "480i  240hz" \
-          cea59   "480i  240hz h" \
-          dmt1    "640x350   85hz" \
-          dmt2    "640x400   85hz" \
-          dmt3    "720x400   85hz" \
-          dmt4    "640x480   60hz" \
-          dmt5    "640x480   72hz" \
-          dmt6    "640x480   75hz" \
-          dmt7    "640x480   85hz" \
-          dmt8    "800x600   56hz" \
-          dmt9    "800x600   60hz" \
-          dmt10   "800x600   72hz" \
-          dmt11   "800x600   75hz" \
-          dmt12   "800x600   85hz" \
-          dmt13   "800x600   120hz" \
-          dmt14   "848x480   60hz" \
-          dmt16   "1024x768  60hz" \
-          dmt17   "1024x768  70hz" \
-          dmt18   "1024x768  75hz" \
-          dmt19   "1024x768  85hz" \
-          dmt20   "1024x768  120hz" \
-          dmt21   "1152x864  75hz" \
+          cea4    "720p  60Hz" \
+          cea5    "1080i 60Hz" \
+          cea6    "480i  60Hz" \
+          cea7    "480i  60Hz  h" \
+          cea8    "240p  60Hz" \
+          cea9    "240p  60Hz  h" \
+          cea10   "480i  60Hz  4x" \
+          cea11   "480i  60Hz  4x h" \
+          cea12   "240p  60Hz  4x" \
+          cea13   "240p  60Hz  4x h" \
+          cea14   "480p  60Hz  2x" \
+          cea15   "480p  60Hz  2x h" \
+          cea16   "1080p 60Hz" \
+          cea17   "576p  50Hz" \
+          cea18   "576p  50Hz  h" \
+          cea19   "720p  50Hz" \
+          cea20   "1080i 50Hz" \
+          cea21   "576i  50Hz" \
+          cea22   "576i  50Hz  h" \
+          cea23   "288p  50Hz" \
+          cea24   "288p  50Hz  h" \
+          cea25   "576i  50Hz  4x" \
+          cea26   "576i  50Hz  4x h" \
+          cea27   "288p  50Hz  4x" \
+          cea28   "288p  50Hz  4x h" \
+          cea29   "576p  50Hz  2x" \
+          cea30   "576p  50Hz  2x h" \
+          cea31   "1080p 50Hz" \
+          cea32   "1080p 24Hz" \
+          cea33   "1080p 25Hz" \
+          cea34   "1080p 30Hz" \
+          cea35   "480p  60Hz  4x" \
+          cea36   "480p  60Hz  4xh" \
+          cea37   "576p  50Hz  4x" \
+          cea38   "576p  50Hz  4x h" \
+          cea39   "1080i 50Hz  reduced blanking" \
+          cea40   "1080i 100Hz" \
+          cea41   "720p  100Hz" \
+          cea42   "576p  100Hz" \
+          cea43   "576p  100Hz h" \
+          cea44   "576i  100Hz" \
+          cea45   "576i  100Hz h" \
+          cea46   "1080i 120Hz" \
+          cea47   "720p  120Hz" \
+          cea48   "480p  120Hz" \
+          cea49   "480p  120Hz h" \
+          cea50   "480i  120Hz" \
+          cea51   "480i  120Hz h" \
+          cea52   "576p  200Hz" \
+          cea53   "576p  200Hz h" \
+          cea54   "576i  200Hz" \
+          cea55   "576i  200Hz h" \
+          cea56   "480p  240Hz" \
+          cea57   "480p  240Hz h" \
+          cea58   "480i  240Hz" \
+          cea59   "480i  240Hz h" \
+          dmt1    "640x350   85Hz" \
+          dmt2    "640x400   85Hz" \
+          dmt3    "720x400   85Hz" \
+          dmt4    "640x480   60Hz" \
+          dmt5    "640x480   72Hz" \
+          dmt6    "640x480   75Hz" \
+          dmt7    "640x480   85Hz" \
+          dmt8    "800x600   56Hz" \
+          dmt9    "800x600   60Hz" \
+          dmt10   "800x600   72Hz" \
+          dmt11   "800x600   75Hz" \
+          dmt12   "800x600   85Hz" \
+          dmt13   "800x600   120Hz" \
+          dmt14   "848x480   60Hz" \
+          dmt16   "1024x768  60Hz" \
+          dmt17   "1024x768  70Hz" \
+          dmt18   "1024x768  75Hz" \
+          dmt19   "1024x768  85Hz" \
+          dmt20   "1024x768  120Hz" \
+          dmt21   "1152x864  75Hz" \
           dmt22   "1280x768        reduced blanking" \
-          dmt23   "1280x768  60hz" \
-          dmt24   "1280x768  75hz" \
-          dmt25   "1280x768  85hz" \
-          dmt26   "1280x768  120hz reduced blanking" \
+          dmt23   "1280x768  60Hz" \
+          dmt24   "1280x768  75Hz" \
+          dmt25   "1280x768  85Hz" \
+          dmt26   "1280x768  120Hz reduced blanking" \
           dmt27   "1280x800        reduced blanking" \
-          dmt28   "1280x800  60hz" \
-          dmt29   "1280x800  75hz" \
-          dmt30   "1280x800  85hz" \
-          dmt31   "1280x800  120hz reduced blanking" \
-          dmt32   "1280x960  60hz" \
-          dmt33   "1280x960  85hz" \
-          dmt34   "1280x960  120hz reduced blanking" \
-          dmt35   "1280x1024 60hz" \
-          dmt36   "1280x1024 75hz" \
-          dmt37   "1280x1024 85hz" \
-          dmt38   "1280x1024 120hz reduced blanking" \
-          dmt39   "1360x768  60hz" \
-          dmt40   "1360x768  120hz reduced blanking" \
+          dmt28   "1280x800  60Hz" \
+          dmt29   "1280x800  75Hz" \
+          dmt30   "1280x800  85Hz" \
+          dmt31   "1280x800  120Hz reduced blanking" \
+          dmt32   "1280x960  60Hz" \
+          dmt33   "1280x960  85Hz" \
+          dmt34   "1280x960  120Hz reduced blanking" \
+          dmt35   "1280x1024 60Hz" \
+          dmt36   "1280x1024 75Hz" \
+          dmt37   "1280x1024 85Hz" \
+          dmt38   "1280x1024 120Hz reduced blanking" \
+          dmt39   "1360x768  60Hz" \
+          dmt40   "1360x768  120Hz reduced blanking" \
           dmt41   "1400x1050       reduced blanking" \
-          dmt42   "1400x1050 60hz" \
-          dmt43   "1400x1050 75hz" \
-          dmt44   "1400x1050 85hz" \
-          dmt45   "1400x1050 120hz reduced blanking" \
+          dmt42   "1400x1050 60Hz" \
+          dmt43   "1400x1050 75Hz" \
+          dmt44   "1400x1050 85Hz" \
+          dmt45   "1400x1050 120Hz reduced blanking" \
           dmt46   "1440x900        reduced blanking" \
-          dmt47   "1440x900  60hz" \
-          dmt48   "1440x900  75hz" \
-          dmt49   "1440x900  85hz" \
-          dmt50   "1440x900  120hz reduced blanking" \
-          dmt51   "1600x1200 60hz" \
-          dmt52   "1600x1200 65hz" \
-          dmt53   "1600x1200 70hz" \
-          dmt54   "1600x1200 75hz" \
-          dmt55   "1600x1200 85hz" \
-          dmt56   "1600x1200 120hz reduced blanking" \
+          dmt47   "1440x900  60Hz" \
+          dmt48   "1440x900  75Hz" \
+          dmt49   "1440x900  85Hz" \
+          dmt50   "1440x900  120Hz reduced blanking" \
+          dmt51   "1600x1200 60Hz" \
+          dmt52   "1600x1200 65Hz" \
+          dmt53   "1600x1200 70Hz" \
+          dmt54   "1600x1200 75Hz" \
+          dmt55   "1600x1200 85Hz" \
+          dmt56   "1600x1200 120Hz reduced blanking" \
           dmt57   "1680x1050       reduced blanking" \
-          dmt58   "1680x1050 60hz" \
-          dmt59   "1680x1050 75hz" \
-          dmt60   "1680x1050 85hz" \
-          dmt61   "1680x1050 120hz reduced blanking" \
-          dmt62   "1792x1344 60hz" \
-          dmt63   "1792x1344 75hz" \
-          dmt64   "1792x1344 120hz reduced blanking" \
-          dmt65   "1856x1392 60hz" \
-          dmt66   "1856x1392 75hz" \
-          dmt67   "1856x1392 120hz reduced blanking" \
+          dmt58   "1680x1050 60Hz" \
+          dmt59   "1680x1050 75Hz" \
+          dmt60   "1680x1050 85Hz" \
+          dmt61   "1680x1050 120Hz reduced blanking" \
+          dmt62   "1792x1344 60Hz" \
+          dmt63   "1792x1344 75Hz" \
+          dmt64   "1792x1344 120Hz reduced blanking" \
+          dmt65   "1856x1392 60Hz" \
+          dmt66   "1856x1392 75Hz" \
+          dmt67   "1856x1392 120Hz reduced blanking" \
           dmt68   "1920x1200       reduced blanking" \
-          dmt69   "1920x1200 60hz" \
-          dmt70   "1920x1200 75hz" \
-          dmt71   "1920x1200 85hz" \
-          dmt72   "1920x1200 120hz reduced blanking" \
-          dmt73   "1920x1440 60hz" \
-          dmt74   "1920x1440 75hz" \
-          dmt75   "1920x1440 120hz reduced blanking" \
+          dmt69   "1920x1200 60Hz" \
+          dmt70   "1920x1200 75Hz" \
+          dmt71   "1920x1200 85Hz" \
+          dmt72   "1920x1200 120Hz reduced blanking" \
+          dmt73   "1920x1440 60Hz" \
+          dmt74   "1920x1440 75Hz" \
+          dmt75   "1920x1440 120Hz reduced blanking" \
           dmt76   "2560x1600       reduced blanking" \
-          dmt77   "2560x1600 60hz" \
-          dmt78   "2560x1600 75hz" \
-          dmt79   "2560x1600 85hz" \
-          dmt80   "2560x1600 120hz reduced blanking" \
-          dmt81   "1366x768  60hz" \
-          dmt82   "1080p     60hz" \
+          dmt77   "2560x1600 60Hz" \
+          dmt78   "2560x1600 75Hz" \
+          dmt79   "2560x1600 85Hz" \
+          dmt80   "2560x1600 120Hz reduced blanking" \
+          dmt81   "1366x768  60Hz" \
+          dmt82   "1080p     60Hz" \
           dmt83   "1600x900        reduced blanking" \
           dmt84   "2048x1152       reduced blanking" \
-          dmt85   "720p      60hz" \
+          dmt85   "720p      60Hz" \
           dmt86   "1366x768        reduced blanking" \
          )
     [ $? -eq 0 ] && do_hdmi_group "$res"
