@@ -5,6 +5,8 @@ FIRMWARE_FILENAME=/boot/start.elf
 FIRMWARE128_FILENAME=/boot/arm128_start.elf
 FIRMWARE192_FILENAME=/boot/arm192_start.elf
 FIRMWARE224_FILENAME=/boot/arm224_start.elf
+HOSTS_FILENAME=/etc/hosts
+HOSTNAME_FILENAME=/etc/hostname
 
 ################################################################
 function di {
@@ -68,7 +70,37 @@ function do_ {
 }
 
 function set_hostname {
-    descr "This action is not yet supported."
+    grep "^127.0.0.1" $HOSTS_FILENAME &>/dev/null
+    if [ $? -eq 0 ]; then
+        sed -i "s/^127.0.0.1\s.\+/127.0.0.1 localhost/" $HOSTS_FILENAME
+        check_guierror $? "Unable to change file $HOSTS_FILENAME" no_ok
+        [ $? -ne 0 ] && return 1
+    else
+        echo "127.0.0.1 localhost" >> $HOSTS_FILENAME
+        check_guierror $? "Unable to change file $HOSTS_FILENAME" no_ok
+        [ $? -ne 0 ] && return 1
+    fi
+
+    grep "^127.0.0.1" $HOSTS_FILENAME &>/dev/null
+    if [ $? -eq 0 ]; then
+        sed -i "s/^127.0.1.1\s.\+/127.0.1.1 $1/" $HOSTS_FILENAME
+        check_guierror $? "Unable to change file $HOSTS_FILENAME" no_ok
+        [ $? -ne 0 ] && return 1
+    else
+        echo "127.0.1.1 $1" >> $HOSTS_FILENAME
+        check_guierror $? "Unable to change file $HOSTS_FILENAME" no_ok
+        [ $? -ne 0 ] && return 1
+    fi
+
+    echo "$1" > $HOSTNAME_FILENAME
+    check_guierror $? "Couldn't change file $HOSTNAME_FILENAME" no_ok
+    [ $? -ne 0 ] && return 1
+
+    hostname "$1"
+    check_guierror $? "Hostname command returned error"
+    [ $? -ne 0 ] && return 1
+
+    return 0
 }
 function do_hostname {
     typeset res
