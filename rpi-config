@@ -1,6 +1,10 @@
 #!/bin/bash
 
-
+CONFIG_FILENAME=/boot/config.txt
+FIRMWARE_FILENAME=/boot/start.elf
+FIRMWARE128_FILENAME=/boot/arm128_start.elf
+FIRMWARE192_FILENAME=/boot/arm192_start.elf
+FIRMWARE224_FILENAME=/boot/arm224_start.elf
 
 ################################################################
 function di {
@@ -41,6 +45,23 @@ function check_guierror {
     return $1
 }
 
+function change_config {
+    touch $CONFIG_FILENAME
+    [ $? -ne 0 ] && return 1
+
+    cp -a -f $CONFIG_FILENAME ${CONFIG_FILENAME}.$(date +%Y%m%d%H%M%S)
+    [ $? -ne 0 ] && return 1
+
+    grep "^$1=" $CONFIG_FILENAME &>/dev/null
+    if [ $? -eq 0 ]; then
+        sed -i "s/^$1=.\\+/$1=$2/" $CONFIG_FILENAME
+        [ $? -ne 0 ] && return 1
+    else
+        echo "$1=$2" >> $CONFIG_FILENAME
+        [ $? -ne 0 ] && return 1
+    fi
+    return 0
+}
 ################################################################
 function do_ {
     eval
@@ -112,18 +133,18 @@ function set_memory {
 
     case "$1" in
         "128/128")
-            filename=arm128_start.elf
+            filename=$FIRMWARE128_FILENAME
         ;;
         "192/64")
-            filename=arm192_start.elf
+            filename=$FIRMWARE192_FILENAME
         ;;
         "224/32")
-            filename=arm224_start.elf
+            filename=$FIRMWARE224_FILENAME
         ;;
     esac
 
-    cp -f /boot/${filename} /boot/start.elf 
-    check_guierror $? "Unable to copy file"
+    cp -f $filename $FIRMWARE_FILENAME
+    check_guierror $? "Unable to copy firmware file $filename"
 }
 function do_memory {
     typeset res
@@ -169,7 +190,8 @@ function do_upgrade_fw {
 }
 
 function set_sdtv_mode {
-    descr "This action is not yet supported."
+    change_config sdtv_mode "$1"
+    check_guierror $? "Setting change unsuccessful"
 }
 function do_sdtv_mode {
     typeset res
@@ -187,7 +209,8 @@ function do_sdtv_mode {
 }
 
 function set_sdtv_aspect {
-    descr "This action is not yet supported."
+    change_config sdtv_aspect "$1"
+    check_guierror $? "Setting change unsuccessful"
 }
 function do_sdtv_aspect {
     typeset res
@@ -204,7 +227,8 @@ function do_sdtv_aspect {
 }
 
 function set_hdmi_safe {
-    descr "This action is not yet supported."
+    change_config hdmi_safe "$1"
+    check_guierror $? "Setting change unsuccessful"
 }
 function do_hdmi_safe {
     typeset res
@@ -226,7 +250,8 @@ See http://elinux.org/RPi_config.txt for more information."
 }
 
 function set_hdmi_force_hotplug {
-    descr "This action is not yet supported."
+    change_config hdmi_force_hotplug "$1"
+    check_guierror $? "Setting change unsuccessful"
 }
 function do_hdmi_force_hotplug {
     typeset res
@@ -242,7 +267,8 @@ function do_hdmi_force_hotplug {
 }
 
 function set_hdmi_drive {
-    descr "This action is not yet supported."
+    change_config hdmi_drive "$1"
+    check_guierror $? "Setting change unsuccessful"
 }
 function do_hdmi_drive {
     typeset res
@@ -258,7 +284,15 @@ function do_hdmi_drive {
 }
 
 function set_hdmi_resolution {
-    descr "This action is not yet supported."
+    if [ "${1:0:3}" = cea ]; then
+        change_config hdmi_group 1 #TODO: check
+    else
+        change_config hdmi_group 2 #TODO: check
+    fi
+    check_guierror $? "Setting change unsuccessful" no_ok
+
+    change_config hdmi_mode "${1:3:2}"
+    check_guierror $? "Setting change unsuccessful"
 }
 function do_hdmi_resolution {
     typeset res
@@ -419,7 +453,8 @@ function do_hdmi_resolution {
 }
 
 function set_hdmi_boost {
-    descr "This action is not yet supported."
+    change_config hdmi_boost "$1"
+    check_guierror $? "Setting change unsuccessful"
 }
 function do_hdmi_boost {
     typeset res
@@ -436,12 +471,13 @@ function do_hdmi_boost {
 }
 
 function set_reset_video {
-    descr "This action is not yet supported."
+    mv $CONFIG_FILENAME ${CONFIG_FILENAME}.$(date +%Y%m%d%H%M%S)
+    check_guierror $? "Unable to delete $CONFIG_FILENAME"
 }
 function do_reset_video {
     typeset res
 
-    descr "This action will reset the video settings to their defaults."
+    descr "This action will reset the video settings to their defaults by deleting $CONFIG_FILENAME."
     [ $? -eq 0 ] && set_reset_video
 }
 
@@ -490,7 +526,7 @@ while [ 1 ]; do
     fi
 done
 
-#clear
+clear
 
 exit 0
 
